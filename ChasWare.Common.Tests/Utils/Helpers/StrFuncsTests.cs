@@ -5,20 +5,20 @@
 //  --------------------------------------------------------------------------------------------------------------------
 
 using ChasWare.Common.Utils.Helpers;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ChasWare.Common.Tests.Utils.Helpers
 {
     /// <summary>
     ///     The StrFuncs tests.
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class StrFuncsTests
     {
         /// <summary>
         ///     Test the contains method
         /// </summary>
-        [Test]
+        [TestMethod]
         public void ContainsTest()
         {
             const string toFind = "Blah";
@@ -40,7 +40,7 @@ namespace ChasWare.Common.Tests.Utils.Helpers
         /// <summary>
         ///     test StrFuncs.IsOneOf
         /// </summary>
-        [Test]
+        [TestMethod]
         public void TestIsOneOf()
         {
             string[] choices =
@@ -61,7 +61,7 @@ namespace ChasWare.Common.Tests.Utils.Helpers
         /// <summary>
         ///     test StrFuncs.IsSubstringOfAny
         /// </summary>
-        [Test]
+        [TestMethod]
         public void TestIsSubstringOfAny()
         {
             string[] choices =
@@ -83,7 +83,7 @@ namespace ChasWare.Common.Tests.Utils.Helpers
         /// <summary>
         ///     test StrFuncs.PackOutStrings
         /// </summary>
-        [Test]
+        [TestMethod]
         public void TestPackOutStrings()
         {
             string[] values =
@@ -107,7 +107,7 @@ namespace ChasWare.Common.Tests.Utils.Helpers
         /// <summary>
         ///     test StrFuncs.PadAndWrap
         /// </summary>
-        [Test]
+        [TestMethod]
         public void TestPadAndWrap()
         {
             const string boon = "Boon";
@@ -121,7 +121,7 @@ namespace ChasWare.Common.Tests.Utils.Helpers
         /// <summary>
         ///     test StrFuncs.SubstringUpTo
         /// </summary>
-        [Test]
+        [TestMethod]
         public void TestSubstringUpTo()
         {
             const string source = "The_Staunton:Lick";

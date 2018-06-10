@@ -5,20 +5,20 @@
 //  --------------------------------------------------------------------------------------------------------------------
 
 using ChasWare.Common.Utils.Helpers;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ChasWare.Common.Tests.Utils.Helpers
 {
     /// <summary>
     ///     The StrFuncs tests.
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class ConfigTests
     {
         /// <summary>
         ///     The config tests.
         /// </summary>
-        [Test]
+        [TestMethod]
         public void AppSettingsTests()
         {
             Assert.AreEqual(123.456f, Config.AppSetting("float", 0f));

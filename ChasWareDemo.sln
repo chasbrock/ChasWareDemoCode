@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChasWareDemo", "ChasWareDemo\ChasWareDemo.csproj", "{196EB03E-3DBA-4EE8-8758-3B7C740D6C66}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChasWare.Common", "ChasWare.Common\ChasWare.Common.csproj", "{96DB640F-23DA-4441-BF37-07F10D576C98}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChasWare.Common.Tests", "ChasWare.Common.Tests\ChasWare.Common.Tests.csproj", "{63EE9863-1A5B-48C2-B13B-95BB02439F6C}"
@@ -13,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChasWare.Data", "ChasWare.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChasWare.Data.Tests", "ChasWare.Data.Tests\ChasWare.Data.Tests.csproj", "{46F2AFE5-14FC-4002-B376-CBA0F0DED5F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataService", "DataService\DataService.csproj", "{7B3D38A0-2958-4B6C-AD06-76A8FB68465D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChasWare.DataService", "DataService\ChasWare.DataService.csproj", "{7B3D38A0-2958-4B6C-AD06-76A8FB68465D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChasWare.DataService.Tests", "DataService.Tests\ChasWare.DataService.Tests.csproj", "{617B6A88-4400-4556-9CE3-DFD79D011F18}"
 EndProject
@@ -23,10 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{196EB03E-3DBA-4EE8-8758-3B7C740D6C66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{196EB03E-3DBA-4EE8-8758-3B7C740D6C66}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{196EB03E-3DBA-4EE8-8758-3B7C740D6C66}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{196EB03E-3DBA-4EE8-8758-3B7C740D6C66}.Release|Any CPU.Build.0 = Release|Any CPU
 		{96DB640F-23DA-4441-BF37-07F10D576C98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{96DB640F-23DA-4441-BF37-07F10D576C98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96DB640F-23DA-4441-BF37-07F10D576C98}.Release|Any CPU.ActiveCfg = Release|Any CPU

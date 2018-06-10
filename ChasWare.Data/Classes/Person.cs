@@ -4,12 +4,14 @@
 // </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
+using ChasWare.Common.Utils.Transform;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using ChasWare.Common.Utils.Helpers;
 
 namespace ChasWare.Data.Classes
 {
+    [ExportToTs]
     public class Person : EntityMapped
     {
         #region public properties

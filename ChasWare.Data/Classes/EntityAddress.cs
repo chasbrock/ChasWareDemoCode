@@ -4,6 +4,7 @@
 // </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
+using ChasWare.Common.Utils.Transform;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -14,6 +15,7 @@ namespace ChasWare.Data.Classes
     ///     maps between entity /address / addresstype
     ///     allows entity to have more than one address
     /// </summary>
+    [ExportToTs]
     public class EntityAddress
     {
         #region Constants and fields 

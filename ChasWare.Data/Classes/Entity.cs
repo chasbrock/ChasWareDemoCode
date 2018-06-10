@@ -4,6 +4,7 @@
 // </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
+using ChasWare.Common.Utils.Transform;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,6 +17,7 @@ namespace ChasWare.Data.Classes
     ///     maps entities such as persons and stores to common
     ///     data such as addresses and contacts
     /// </summary>
+    [ExportToTs]
     public class Entity
     {
         #region public properties

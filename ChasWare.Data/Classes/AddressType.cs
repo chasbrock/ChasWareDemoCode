@@ -4,12 +4,14 @@
 // </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
+using ChasWare.Common.Utils.Transform;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ChasWare.Data.Classes
 {
+    [ExportToTs]
     public class AddressType
     {
         #region Entity Framework Mapping

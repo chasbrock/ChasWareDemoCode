@@ -31,7 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ApplicationAssemblyUtility, Version=1.2.1.16, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ApplicationAssemblyUtility.1.2.1.16\lib\net40\ApplicationAssemblyUtility.dll</HintPath>
+      <HintPath>..\..\..\packages\ApplicationAssemblyUtility.1.2.1.16\lib\net40\ApplicationAssemblyUtility.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Common.Logging.3.4.1\lib\net40\Common.Logging.dll</HintPath>
@@ -76,6 +76,8 @@
     <Compile Include="Utils\Helpers\StrFuncs.cs" />
     <Compile Include="Utils\Properties\Annotations.cs" />
     <Compile Include="Utils\Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\Transform\ExportToTs.cs" />
+    <Compile Include="Utils\Transform\TsTransformTools.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

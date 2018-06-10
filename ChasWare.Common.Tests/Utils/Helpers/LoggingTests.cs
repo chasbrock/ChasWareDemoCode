@@ -6,14 +6,14 @@
 
 using System;
 using ChasWare.Common.Utils.Helpers;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ChasWare.Common.Tests.Utils.Helpers
 {
-    [TestFixture]
+    [TestClass]
     public class LoggingTests
     {
-        [Test]
+        [TestMethod]
         public void Initilise()
         {
             try

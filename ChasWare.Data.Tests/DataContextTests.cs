@@ -6,14 +6,14 @@
 
 using System.Linq;
 using ChasWare.Data.Classes;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ChasWare.Data.Tests
 {
     /// <summary>
     ///     The data context tests.
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class DataContextTests
     {
         #region Constants and fields 
@@ -27,59 +27,59 @@ namespace ChasWare.Data.Tests
         /// <summary>
         ///     Make sure we have all the DataSets that we expect
         /// </summary>
-        [Test]
+        [TestMethod]
         public void CheckForDataSets()
         {
             Address address = _dataContext.Addresses.FirstOrDefault();
-            Assert.NotNull(address);
+            Assert.IsNotNull(address);
 
             AddressType addressType = _dataContext.AddressTypes.FirstOrDefault();
-            Assert.NotNull(addressType);
+            Assert.IsNotNull(addressType);
 
             ContactDetail contactDetail = _dataContext.ContactDetails.FirstOrDefault();
-            Assert.NotNull(contactDetail);
+            Assert.IsNotNull(contactDetail);
 
             ContactType contactType = _dataContext.ContactTypes.FirstOrDefault();
-            Assert.NotNull(contactType);
+            Assert.IsNotNull(contactType);
 
             Customer customer = _dataContext.Customers.FirstOrDefault();
-            Assert.NotNull(customer);
+            Assert.IsNotNull(customer);
 
             Department department = _dataContext.Departments.FirstOrDefault();
-            Assert.NotNull(department);
+            Assert.IsNotNull(department);
 
             Employee employee = _dataContext.Employees.FirstOrDefault();
-            Assert.NotNull(employee);
+            Assert.IsNotNull(employee);
 
             EntityAddress entityAddress = _dataContext.EntityAddresses.FirstOrDefault();
-            Assert.NotNull(entityAddress);
+            Assert.IsNotNull(entityAddress);
 
             EntityContact entityContact = _dataContext.EntityContacts.FirstOrDefault();
-            Assert.NotNull(entityContact);
+            Assert.IsNotNull(entityContact);
 
             Person person = _dataContext.Persons.FirstOrDefault();
-            Assert.NotNull(person);
+            Assert.IsNotNull(person);
 
             Role role = _dataContext.Roles.FirstOrDefault();
-            Assert.NotNull(role);
+            Assert.IsNotNull(role);
 
             SalesTerritory salesTerritory = _dataContext.SalesTerritories.FirstOrDefault();
-            Assert.NotNull(salesTerritory);
+            Assert.IsNotNull(salesTerritory);
 
             SalesPerson salesPerson = _dataContext.SalesPersons.FirstOrDefault();
-            Assert.NotNull(salesPerson);
+            Assert.IsNotNull(salesPerson);
 
             StateProvince stateProvince = _dataContext.StateProvinces.FirstOrDefault();
-            Assert.NotNull(stateProvince);
+            Assert.IsNotNull(stateProvince);
 
             Store store = _dataContext.Stores.FirstOrDefault();
-            Assert.NotNull(store);
+            Assert.IsNotNull(store);
         }
 
         /// <summary>
         ///     The setup.
         /// </summary>
-        [SetUp]
+        [TestInitialize]
         public void Setup()
         {
             _dataContext = new DataContext();
