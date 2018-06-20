@@ -4,23 +4,42 @@
 // </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ChasWare.Data;
 using ChasWare.Data.Classes;
+using Common.Logging;
 
-namespace DataService.Controllers
+namespace ChasWare.DataService.Controllers
 {
+    /// <inheritdoc />
+    /// <summary>
+    ///     provides web access to Adress objects
+    /// </summary>
     public class AddressesController : ApiController
     {
         #region Constants and fields 
 
-        private readonly DataContext _dataContext = new DataContext();
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        private readonly DataContext _dataContext;
+
+        #endregion
+
+        #region Constructors
+
+        public AddressesController()
+        {
+            _dataContext = new DataContext();
+            _dataContext.Configuration.ProxyCreationEnabled = false;
+        }
 
         #endregion
 
@@ -30,7 +49,8 @@ namespace DataService.Controllers
         [ResponseType(typeof(Address))]
         public async Task<IHttpActionResult> DeleteAddress(int id)
         {
-            Address address = await _dataContext.Addresses.FindAsync(id);
+            Address address = await Task.Run(() => { return _dataContext.Addresses.AsNoTracking().FirstOrDefault(a => a.EntityAddress.AddressId == id); });
+
             if (address == null)
             {
                 return NotFound();
@@ -46,19 +66,28 @@ namespace DataService.Controllers
         [ResponseType(typeof(Address))]
         public async Task<IHttpActionResult> GetAddress(int id)
         {
-            Address address = await _dataContext.Addresses.FindAsync(id);
-            if (address == null)
+            try
             {
-                return NotFound();
+                Address address = await Task.Run(() => { return _dataContext.Addresses.AsNoTracking().FirstOrDefault(a => a.EntityAddress.AddressId == id); });
+                if (address == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(address);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"GetAddress(int {id})", ex);
             }
 
-            return Ok(address);
+            return NotFound();
         }
 
         // GET: api/Addresses
         public IQueryable<Address> GetAddresses()
         {
-            return _dataContext.Addresses;
+            return _dataContext.Addresses.AsNoTracking();
         }
 
         // POST: api/Addresses

@@ -119,7 +119,7 @@
     <Compile Include="Utils\Helpers\ConfigTests.cs" />
     <Compile Include="Utils\Helpers\LoggingTests.cs" />
     <Compile Include="Utils\Helpers\StrFuncsTests.cs" />
-    <Compile Include="Utils\Transform\TestExportClassA.cs" />
+    <Compile Include="Utils\Transform\TestExportClasses.cs" />
     <Compile Include="Utils\Transform\TestTransformations.cs" />
   </ItemGroup>
   <ItemGroup>

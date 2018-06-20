@@ -4,11 +4,11 @@
 // </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-using ChasWare.Common.Utils.Transform;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ChasWare.Common.Utils.Transformation;
 using ChasWare.Data.DummyData;
 
 namespace ChasWare.Data.Classes
@@ -17,7 +17,7 @@ namespace ChasWare.Data.Classes
     ///     maps entities such as persons and stores to common
     ///     data such as addresses and contacts
     /// </summary>
-    [ExportToTs]
+    [Transformer.Transform]
     public class Entity
     {
         #region public properties

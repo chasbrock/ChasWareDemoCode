@@ -4,10 +4,10 @@
 // </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-using ChasWare.Common.Utils.Transform;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ChasWare.Common.Utils.Transformation;
 
 namespace ChasWare.Data.Classes
 {
@@ -15,7 +15,7 @@ namespace ChasWare.Data.Classes
     ///     maps between entity  contact details
     ///     allows aentity to have more than one address
     /// </summary>
-    [ExportToTs]
+    [Transformer.Transform]
     public class EntityContact
     {
         #region Constants and fields 

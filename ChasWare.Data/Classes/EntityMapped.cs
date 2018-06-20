@@ -4,17 +4,17 @@
 // </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-using ChasWare.Common.Utils.Transform;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ChasWare.Common.Utils.Transformation;
 
 namespace ChasWare.Data.Classes
 {
     /// <summary>
     ///     used to provide basic access to entity and then onto address etc
     /// </summary>
-    [ExportToTs]
+    [Transformer.Transform]
     public abstract class EntityMapped
     {
         #region public properties

@@ -6,7 +6,7 @@
 
 using System.Web.Http;
 
-namespace DataService
+namespace ChasWare.DataService
 {
     public static class WebApiConfig
     {

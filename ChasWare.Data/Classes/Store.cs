@@ -5,12 +5,12 @@
 //  --------------------------------------------------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
-using ChasWare.Common.Utils.Transform;
 using System.ComponentModel.DataAnnotations.Schema;
+using ChasWare.Common.Utils.Transformation;
 
 namespace ChasWare.Data.Classes
 {
-    [ExportToTs]
+    [Transformer.Transform]
     public class Store : EntityMapped
     {
         #region public properties

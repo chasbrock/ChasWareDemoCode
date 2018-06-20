@@ -107,10 +107,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="ExportToTs.log">
+    <None Include="TransformDataClasses.log">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ExportToTs.tt</DependentUpon>
+      <DependentUpon>TransformDataClasses.tt</DependentUpon>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
@@ -124,9 +124,9 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ExportToTs.tt">
+    <Content Include="TransformDataClasses.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ExportToTs.log</LastGenOutput>
+      <LastGenOutput>TransformDataClasses.log</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>

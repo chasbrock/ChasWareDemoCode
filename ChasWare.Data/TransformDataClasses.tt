@@ -1,0 +1,49 @@
+﻿<#@ template debug="true" hostSpecific="true" language="C#" #>
+<#@ output extension=".log" #>
+<#@ assembly Name="System.Core.dll" #>
+<#@ assembly name="$(TargetDir)ChasWare.Common.dll" #>
+<#@ assembly name="$(TargetDir)ChasWare.Data.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="ChasWare.Data" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Linq" #> 
+
+<# 
+	IEnumerable<Type> types =  ChasWare.Common.Utils.Transformation.Transformer.GetExportedTypes("ChasWare.Data");
+	string targetPath = GetTarget(@"\Exported", Host);
+	string extension =  ".d.ts";
+	foreach (Type t in types)
+    {
+       string content = ChasWare.Common.Utils.Transformation.TransformTools.ExtractToTypeScript(t, types);
+	   if(string.IsNullOrWhiteSpace(content)) 
+	   {
+	      continue;
+	   }
+	   WriteLine($"Translating to TS {t.Name} => {targetPath}\\{t.Name}.{extension}");
+	   ChasWare.Common.Utils.Transformation.Transformer.PrintToFile(t, content, targetPath, extension);
+    }
+
+	targetPath = GetTarget(@"\DTO", Host);
+    extension =  ".dto.cs";
+	foreach (Type t in types)
+    {
+	   string content = ChasWare.Common.Utils.Transformation.TransformerCreateDTO(t, types);
+	   if(string.IsNullOrWhiteSpace(content)) 
+	   {
+	      continue;
+	   }
+       WriteLine($"Creating DTO => {targetPath}\\{t.Name}.{extension}");
+       ChasWare.Common.Utils.Transformation.Transformer.PrintToFile(t, content, targetPath, extension);
+   }
+ #>
+
+<#+
+	string GetTarget(string relativeOutputFilePath, Microsoft.VisualStudio.TextTemplating.ITextTemplatingEngineHost host)
+    {
+        string outputPath = System.IO.Path.GetDirectoryName(host.TemplateFile);
+        return System.IO.Path.Combine(outputPath + relativeOutputFilePath);
+    }
+
+#>

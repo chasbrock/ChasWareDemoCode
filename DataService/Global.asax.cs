@@ -14,7 +14,7 @@ using ChasWare.Data.Classes;
 using Common.Logging;
 using Spring.Context;
 
-namespace DataService
+namespace ChasWare.DataService
 {
     public class WebApiApplication : HttpApplication
     {
