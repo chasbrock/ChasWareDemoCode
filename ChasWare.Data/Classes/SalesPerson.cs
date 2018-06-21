@@ -16,7 +16,10 @@ namespace ChasWare.Data.Classes
     {
         #region public properties
 
+        [Transformer.Transform(Conflate = true)]
         public virtual Person Person { get; set; }
+
+        [Transformer.Transform(Conflate = true)]
         public virtual SalesTerritory SalesTerritory { get; set; }
 
         #endregion

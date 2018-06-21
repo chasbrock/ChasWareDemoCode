@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using ChasWare.Common.Utils.Transformation;
 
 namespace ChasWare.Common.Tests.Utils.Transform
 {
-    [Common.Utils.Transformation.Transformer.Transform]
+    [Transformer.Transform]
     public class TestChild
     {
         #region Entity Framework Mapping
@@ -15,7 +16,7 @@ namespace ChasWare.Common.Tests.Utils.Transform
         #endregion
     }
 
-    [Common.Utils.Transformation.Transformer.Transform]
+    [Transformer.Transform]
     public class TestAddress
     {
         #region Entity Framework Mapping
@@ -28,12 +29,13 @@ namespace ChasWare.Common.Tests.Utils.Transform
     }
 
 
-    [Common.Utils.Transformation.Transformer.Transform]
+    [Transformer.Transform]
     public class TestParent
     {
         #region Entity Framework Mapping
 
-        public int Id { get; set; }
+        public int? Id { get; set; }
+        public double[] Values;
         public string ParentName { get; set; }
         public TestAddress HomeAddress { get; set; }
         public List<TestChild> Children { get; set; }

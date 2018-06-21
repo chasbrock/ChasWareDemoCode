@@ -8,34 +8,50 @@
 <#@ import namespace="System.Reflection" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Text" #>
-<#@ import namespace="System.Linq" #> 
+<#@ import namespace="System.Linq" #>
+
 
 <# 
-	IEnumerable<Type> types =  ChasWare.Common.Utils.Transformation.Transformer.GetExportedTypes("ChasWare.Data");
-	string targetPath = GetTarget(@"\Exported", Host);
-	string extension =  ".d.ts";
-	foreach (Type t in types)
+	string assemblyName = "ChasWare.Data";
+	string rootPath = GetTarget(@"\Classes", Host);
+	ChasWare.Common.Utils.Transformation.Transformer transformer = new ChasWare.Common.Utils.Transformation.Transformer(assemblyName, rootPath);
+	
+    string extension =  ".ts";
+	string fileName;
+
+	foreach (Type t in transformer.ExportedTypes)
     {
-       string content = ChasWare.Common.Utils.Transformation.TransformTools.ExtractToTypeScript(t, types);
+       string content = transformer.CreateTS(t);
 	   if(string.IsNullOrWhiteSpace(content)) 
 	   {
 	      continue;
 	   }
-	   WriteLine($"Translating to TS {t.Name} => {targetPath}\\{t.Name}.{extension}");
-	   ChasWare.Common.Utils.Transformation.Transformer.PrintToFile(t, content, targetPath, extension);
+	   fileName = transformer.PrintToFile(t, content,  "TS", extension);
+	   WriteLine($"Creating TypeScript (TS) data file{t.Name} => {fileName}");
     }
 
-	targetPath = GetTarget(@"\DTO", Host);
     extension =  ".dto.cs";
-	foreach (Type t in types)
+	foreach (Type t in transformer.ExportedTypes)
     {
-	   string content = ChasWare.Common.Utils.Transformation.TransformerCreateDTO(t, types);
+	   string content = transformer.CreateDTO(t);
 	   if(string.IsNullOrWhiteSpace(content)) 
 	   {
 	      continue;
 	   }
-       WriteLine($"Creating DTO => {targetPath}\\{t.Name}.{extension}");
-       ChasWare.Common.Utils.Transformation.Transformer.PrintToFile(t, content, targetPath, extension);
+  	   fileName = transformer.PrintToFile(t, content, "DTO", extension);
+	   WriteLine($"Creating Data Transfer Object (DTO) file{t.Name} => {fileName}");
+   }
+
+    extension =  ".tx.cs";
+	foreach (Type t in transformer.ExportedTypes)
+    {
+	   string content = transformer.CreateTX(t);
+	   if(string.IsNullOrWhiteSpace(content)) 
+	   {
+	      continue;
+	   }
+  	   fileName = transformer.PrintToFile(t, content, "TX", extension);
+	   WriteLine($"Creating Translator (TX) file{t.Name} => {fileName}");
    }
  #>
 

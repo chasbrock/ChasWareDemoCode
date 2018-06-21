@@ -17,19 +17,17 @@ namespace ChasWare.Data.Classes
     [Transformer.Transform]
     public abstract class EntityMapped
     {
-        #region public properties
-
-        /// <summary>
-        ///     access general details susch as
-        /// </summary>
-        public virtual Entity Entity { get; set; }
-
-        #endregion
-
         #region Entity Framework Mapping
 
         [Key, ForeignKey(nameof(Entity))]
         public int EntityId { get; set; }
+
+        /// <summary>
+        ///     access general details susch as
+        /// </summary>
+        [Transformer.Transform(Conflate = true)]
+        public virtual Entity Entity { get; set; }
+
 
         [Required, DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime ModifiedDate { get; set; }

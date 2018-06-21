@@ -7,24 +7,20 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ChasWare.Common.Utils.Transformation;
 
 namespace ChasWare.Data.Classes
 {
+    [Transformer.Transform]
     public class Address
     {
-        #region public properties
-
-        [Required, ForeignKey("AddressId")]
-        public virtual EntityAddress EntityAddress { get; set; }
-
-        public virtual StateProvince StateProvince { get; set; }
-
-        #endregion
-
         #region Entity Framework Mapping
 
         [Required, Key]
         public int AddressId { get; set; }
+
+        [Required, ForeignKey("AddressId"), Transformer.Transform(Ignore = true)]
+        public virtual EntityAddress EntityAddress { get; set; }
 
         [Required, StringLength(60)]
         public string AddressLine1 { get; set; }
@@ -37,6 +33,9 @@ namespace ChasWare.Data.Classes
 
         [Required, ForeignKey(nameof(StateProvince))]
         public int StateProvinceId { get; set; }
+
+        [Transformer.Transform(Conflate = true)]
+        public virtual StateProvince StateProvince { get; set; }
 
         [Required, StringLength(12)]
         public string PostalCode { get; set; }

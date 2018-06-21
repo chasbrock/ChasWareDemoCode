@@ -21,11 +21,6 @@ namespace ChasWare.Data.Classes
         /// </summary>
         public string FullName => StrFuncs.PackOutStrings(EntityId.ToString(), Title, FirstName, MiddleName, LastName, Suffix);
 
-        /// <summary>
-        ///     what role does this person perform
-        /// </summary>
-        public virtual Role Role { get; set; }
-
         #endregion
 
         #region public methods
@@ -52,6 +47,12 @@ namespace ChasWare.Data.Classes
 
         [ForeignKey(nameof(Role))]
         public int? RoleId { get; set; }
+
+        /// <summary>
+        ///     what role does this person perform
+        /// </summary>
+        [Transformer.Transform(Conflate = true)]
+        public virtual Role Role { get; set; }
 
         [Column(TypeName = "char"), StringLength(2)]
         public string PersonType { get; set; }

@@ -16,7 +16,7 @@ namespace ChasWare.Data.Classes
     {
         #region public properties
 
-        [ForeignKey("ContactId")]
+        [ForeignKey("ContactId"), Transformer.Transform(Ignore = true)]
         public virtual EntityContact EntityContact { get; set; }
 
         #endregion

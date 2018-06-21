@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using ChasWare.Common.Utils.Transformation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -20,7 +19,7 @@ namespace ChasWare.Common.Tests.Utils.Transform
         public void ExportToDTO()
         {
             // create dummy class
-            string fileContent = CreateDummyDTO("ChasWare.Common.Tests.Utils.Transform", nameof(TestParent));
+            string fileContent = CreateDummyDTO();
 
             Transformer transformer = new Transformer("ChasWare.Common.Tests", string.Empty);
             Type parentType = transformer.ExportedTypes.Single(t => t == typeof(TestParent));
@@ -40,13 +39,32 @@ namespace ChasWare.Common.Tests.Utils.Transform
         public void ExportToTS()
         {
             // create dummy class
-            string fileContent = CreateDummyTS(nameof(TestParent));
+            string fileContent = CreateDummyTS();
 
             Transformer transformer = new Transformer("ChasWare.Common.Tests", string.Empty);
             IEnumerable<Type> types = transformer.ExportedTypes;
             Type parentType = types.Single(t => t == typeof(TestParent));
             Assert.IsNotNull(parentType);
             string exported = transformer.CreateTS(parentType);
+            string a = Regex.Replace(fileContent, @"\s", "");
+            string b = Regex.Replace(exported, @"\s", "");
+            Assert.IsTrue(string.Compare(a, b, StringComparison.OrdinalIgnoreCase) == 0);
+        }
+
+        /// <summary>
+        ///     test that we produce the data we expect
+        /// </summary>
+        [TestMethod]
+        public void ExportToTX()
+        {
+            // create dummy class
+            string fileContent = CreateDummyTX();
+
+            Transformer transformer = new Transformer("ChasWare.Common.Tests", string.Empty);
+            IEnumerable<Type> types = transformer.ExportedTypes;
+            Type parentType = types.Single(t => t == typeof(TestParent));
+            Assert.IsNotNull(parentType);
+            string exported = transformer.CreateTX(parentType);
             string a = Regex.Replace(fileContent, @"\s", "");
             string b = Regex.Replace(exported, @"\s", "");
             Assert.IsTrue(string.Compare(a, b, StringComparison.OrdinalIgnoreCase) == 0);
@@ -71,37 +89,88 @@ namespace ChasWare.Common.Tests.Utils.Transform
 
         #region other methods
 
-        private static string CreateDummyDTO(string nameSpace, string typeName)
+        private static string CreateDummyDTO()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("using System;");
-            sb.AppendLine("using System.Collections.Generic;");
-            sb.AppendLine();
-            sb.AppendLine($"namespace {nameSpace}.DTO.{typeName}DTO;");
-            sb.AppendLine("{");
-            sb.AppendLine("  public int Id { get; set; }");
-            sb.AppendLine("  public string ParentName { get; set; }");
-            sb.AppendLine("  public string Line1 { get; set; }");
-            sb.AppendLine("  public string Line2 { get; set; }");
-            sb.AppendLine("  public List<TestChildDTO> Children { get; set; }");
-            sb.AppendLine("  public DateTime TimeStamp { get; set; }");
-            sb.AppendLine("}");
-            return sb.ToString();
+            return @"
+// WARNING: this code is auto generated and should not be modified.
+// hint:    if you need to modify it, let it build into a non-project directory
+//          then use a text comparison to sync any changes.
+
+using System;
+using System.Collections.Generic;
+
+namespace ChasWare.Common.Tests.Utils.Transform.DTO;
+{
+  public class TestParentDTO;
+{
+    public Int32? Id { get;  set; };
+    public String ParentName { get;  set; };
+    public String Line1 { get;  set; };
+    public String Line2 { get;  set; };
+    public List<TestChild> Children { get;  set; };
+    public DateTime TimeStamp { get;  set; };
+    public Double[] Values;
+  }
+}";
         }
 
-        private static string CreateDummyTS(string typeName)
+        private static string CreateDummyTX()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"export class {typeName} {{");
-            sb.AppendLine("  id: number;");
-            sb.AppendLine("  parentName: string;");
-            sb.AppendLine("  line1: string;");
-            sb.AppendLine("  line2: string;");
-            sb.AppendLine("  children: TestChild[] ;");
-            sb.AppendLine("  timeStamp: any;");
-            sb.AppendLine("}");
+            return @"
+// WARNING: this code is auto generated and should not be modified.
+// hint:    if you need to modify it, let it build into a non-project directory
+//          then use a text comparison to sync any changes.
 
-            return sb.ToString();
+using System;
+using System.Collections.Generic;
+using ChasWare.Common.Tests;
+using ChasWare.Common.Tests.DTO;
+
+namespace ChasWare.Common.Tests.Utils.Transform.TX;
+{
+ public static class TestParentTX;
+  {
+    public static void DTO ReadFromDTO(TestParentDTO source, TestParent target)
+    {
+       target.Id = source.Id;
+       target.ParentName = source.ParentName;
+       target.TestAddress.Line1 = source.Line1;
+       target.TestAddress.Line2 = source.Line2;
+       target.Children = source.Children;
+       target.TimeStamp = source.TimeStamp;
+       target.Values = source.Values;
+       return created;
+    }
+
+    public static TestParentDTO WriteToDTO(TestParent source)
+    {
+       TestParentDTO created = new TestParentDTO();
+       created.Id = source.Id;
+       created.ParentName = source.ParentName;
+       created.Line1 = source.TestAddress.Line1;
+       created.Line2 = source.TestAddress.Line2;
+       created.Children = source.Select(i => TestChildTX.WriteToDTO(i)).ToArray();
+       created.TimeStamp = source.TimeStamp;
+       created.Values = source.Select().ToArray();
+       return created;
+    }
+
+  }
+}";
+        }
+
+
+        private static string CreateDummyTS()
+        {
+            return @"export class TestParent {
+  id: number;
+  parentName: string;
+  line1: string;
+  line2: string;
+  children: TestChild[];
+  timeStamp: any;
+  values: number[];
+}";
         }
 
         #endregion

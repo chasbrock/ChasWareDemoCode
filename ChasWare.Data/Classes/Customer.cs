@@ -14,14 +14,6 @@ namespace ChasWare.Data.Classes
     [Transformer.Transform]
     public class Customer
     {
-        #region public properties
-
-        public virtual Person Person { get; set; }
-        public virtual SalesTerritory SalesTerritory { get; set; }
-        public virtual Store Store { get; set; }
-
-        #endregion
-
         #region Entity Framework Mapping
 
         [Key]
@@ -30,11 +22,17 @@ namespace ChasWare.Data.Classes
         [ForeignKey(nameof(SalesTerritory))]
         public int? SalesTerritoryId { get; set; }
 
+        public virtual SalesTerritory SalesTerritory { get; set; }
+
         [ForeignKey(nameof(Store))]
         public int? StoreId { get; set; }
 
+        public virtual Store Store { get; set; }
+
         [ForeignKey(nameof(Person))]
         public int? PersonId { get; set; }
+
+        public virtual Person Person { get; set; }
 
         [StringLength(50)]
         public string AccountNumber { get; set; }
