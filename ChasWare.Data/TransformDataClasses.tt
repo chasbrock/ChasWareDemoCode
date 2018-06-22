@@ -27,7 +27,7 @@
 	      continue;
 	   }
 	   fileName = transformer.PrintToFile(t, content,  "TS", extension);
-	   WriteLine($"Creating TypeScript (TS) data file{t.Name} => {fileName}");
+	   WriteLine($"{DateTime.Now} Creating TypeScript (TS) data file {t.Name} => {fileName}");
     }
 
     extension =  ".dto.cs";
@@ -39,7 +39,7 @@
 	      continue;
 	   }
   	   fileName = transformer.PrintToFile(t, content, "DTO", extension);
-	   WriteLine($"Creating Data Transfer Object (DTO) file{t.Name} => {fileName}");
+	   WriteLine($"{DateTime.Now} Creating Data Transfer Object (DTO) file {t.Name} => {fileName}");
    }
 
     extension =  ".tx.cs";
@@ -51,8 +51,10 @@
 	      continue;
 	   }
   	   fileName = transformer.PrintToFile(t, content, "TX", extension);
-	   WriteLine($"Creating Translator (TX) file{t.Name} => {fileName}");
+	   WriteLine($"{DateTime.Now} Creating Translator (TX) file {t.Name} => {fileName}");
    }
+
+   WriteLine(transformer.Log.ToString());
  #>
 
 <#+

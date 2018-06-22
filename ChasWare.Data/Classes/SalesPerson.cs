@@ -14,20 +14,14 @@ namespace ChasWare.Data.Classes
     [Transformer.Transform]
     public class SalesPerson
     {
-        #region public properties
-
-        [Transformer.Transform(Conflate = true)]
-        public virtual Person Person { get; set; }
-
-        [Transformer.Transform(Conflate = true)]
-        public virtual SalesTerritory SalesTerritory { get; set; }
-
-        #endregion
-
         #region Entity Framework Mapping
 
         [Key, ForeignKey(nameof(Person))]
         public int EntityId { get; set; }
+
+        public virtual Person Person { get; set; }
+
+        public virtual SalesTerritory SalesTerritory { get; set; }
 
         [ForeignKey(nameof(SalesTerritory))]
         public int? SalesTerritoryId { get; set; }

@@ -1,5 +1,7 @@
 export class SalesPerson {
   entityId: number;
+  person: Person;
+  salesTerritory: SalesTerritory;
   salesTerritoryId: number;
   salesQuota: number;
   bonus: number;

@@ -3,5 +3,7 @@ export class Store {
   salesPersonId: number;
   storeName: string;
   entityId: number;
+  addresses: EntityAddress[];
+  contactDetails: EntityContact[];
   modifiedDate: any;
 }

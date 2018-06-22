@@ -28,7 +28,6 @@ namespace ChasWare.Data.Classes
         [Transformer.Transform(Conflate = true)]
         public virtual Entity Entity { get; set; }
 
-
         [Required, DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime ModifiedDate { get; set; }
 

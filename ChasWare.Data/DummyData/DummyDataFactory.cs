@@ -270,7 +270,6 @@ namespace ChasWare.Data.DummyData
                 };
         }
 
-
         private static List<Employee> LoadEmployee()
         {
             return new List<Employee>
@@ -325,7 +324,6 @@ namespace ChasWare.Data.DummyData
                 };
         }
 
-
         private static List<Person> LoadPeople()
         {
             return new List<Person>
@@ -333,7 +331,6 @@ namespace ChasWare.Data.DummyData
                     new Person {EntityId = 1, PersonType = "EM", FirstName = "Ken", MiddleName = "J", LastName = "Sánchez"}
                 };
         }
-
 
         private static List<StateProvince> LoadStateProvince()
         {

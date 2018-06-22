@@ -13,6 +13,8 @@ namespace ChasWare.Common.Tests.Utils.Helpers
     [TestClass]
     public class LoggingTests
     {
+        #region public methods
+
         [TestMethod]
         public void Initilise()
         {
@@ -25,5 +27,7 @@ namespace ChasWare.Common.Tests.Utils.Helpers
                 Console.WriteLine(ex);
             }
         }
+
+        #endregion
     }
 }

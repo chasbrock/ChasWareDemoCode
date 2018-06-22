@@ -15,6 +15,8 @@ namespace ChasWare.Common.Tests.Utils.Helpers
     [TestClass]
     public class StrFuncsTests
     {
+        #region public methods
+
         /// <summary>
         ///     Test the contains method
         /// </summary>
@@ -131,5 +133,7 @@ namespace ChasWare.Common.Tests.Utils.Helpers
             Assert.AreEqual(source.SubstringUpTo('\0'), source);
             Assert.AreEqual(StrFuncs.SubstringUpTo(null, '*'), null);
         }
+
+        #endregion
     }
 }

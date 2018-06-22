@@ -17,6 +17,7 @@ namespace ChasWare.Data
         public DataContext()
             : base("ChasWareDemo")
         {
+            Configuration.LazyLoadingEnabled = false; 
         }
 
         #endregion

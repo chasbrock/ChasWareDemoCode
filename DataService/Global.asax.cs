@@ -28,10 +28,10 @@ namespace ChasWare.DataService
             IApplicationContext ctx = DependencyInjection.InitialiseSpring();
 
             // trigger context load
-            if (!ctx.GetObject<IEnumerable<Person>>().Any())
-            {
-                log.Error("Where is everybody?");
-            }
+       //     if (!ctx.GetObject<IEnumerable<Person>>().Any())
+       //     {
+       //         log.Error("Where is everybody?");
+       //     }
         }
 
         #endregion

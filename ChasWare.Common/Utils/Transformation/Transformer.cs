@@ -15,7 +15,16 @@ namespace ChasWare.Common.Utils.Transformation
     {
         #region Constants and fields 
 
-        private readonly StringBuilder _log = new StringBuilder();
+        /// <summary>
+        ///     Warning text displayed at top of files
+        /// </summary>
+        /// <value></value>
+        public const string DisplayWarning = @"
+// WARNING: this code is auto generated and should not be modified.
+// hint:    if you need to modify it, let it build into a non-project directory
+//          then use a text comparison tool to sync any changes.
+";
+
         private List<MemberInfo> _existingMembers;
         private List<Tuple<MemberInfo, MemberInfo>> _members;
         private Type _poco;
@@ -32,7 +41,7 @@ namespace ChasWare.Common.Utils.Transformation
         public Transformer(string assemblyName, string rootPath)
         {
             RootPath = rootPath;
-            _log.AppendLine($"Generating code from {assemblyName} to {rootPath}");
+            Log.AppendLine($"Generating code from {assemblyName} to {rootPath}");
             ExportedTypes = GetExportedTypes(assemblyName);
         }
 
@@ -46,6 +55,11 @@ namespace ChasWare.Common.Utils.Transformation
         public IEnumerable<Type> ExportedTypes { get; }
 
         /// <summary>
+        ///     Gets a log of any problems or issues
+        /// </summary>
+        public StringBuilder Log { get; } = new StringBuilder();
+
+        /// <summary>
         ///     directory where files are to be written to
         /// </summary>
         public string RootPath { get; }
@@ -54,74 +68,84 @@ namespace ChasWare.Common.Utils.Transformation
 
         #region public methods
 
-        public static string DisplayWarning()
-        {
-            return @"
-// WARNING: this code is auto generated and should not be modified.
-// hint:    if you need to modify it, let it build into a non-project directory
-//          then use a text comparison to sync any changes.
-";
-        }
-
         /// <summary>
         ///     flatten fields of siblings, then write to .cs file structure
         /// </summary>
         /// <returns></returns>
         public string CreateDTO(Type poco)
         {
-            AnalyseType(poco);
-            StringBuilder dto = new StringBuilder();
-            dto.AppendLine(DisplayWarning());
-            dto.AppendLine("using System;");
-            dto.AppendLine("using System.Collections.Generic;");
-            dto.AppendLine();
-            dto.AppendLine($"namespace {_poco.Namespace}.DTO");
-            dto.AppendLine("{");
-            dto.AppendLine($"  public class {_poco.Name}DTO");
-            dto.AppendLine("{");
-
-            // ReSharper disable once SwitchStatementMissingSomeCases (we are not interested in other member types)
-            foreach (MemberInfo info in _members.Select(t => t.Item1))
+            try
             {
-                switch (info.MemberType)
+                AnalyseType(poco);
+                StringBuilder dto = new StringBuilder();
+                dto.AppendLine(DisplayWarning);
+                dto.AppendLine("using System;");
+                dto.AppendLine("using System.Collections.Generic;");
+                dto.AppendLine();
+                dto.AppendLine($"namespace {_poco.Namespace}.DTO");
+                dto.AppendLine("{");
+                dto.AppendLine($"  public class {_poco.Name}DTO");
+                dto.AppendLine("{");
+
+                // ReSharper disable once SwitchStatementMissingSomeCases (we are not interested in other member types)
+                foreach (MemberInfo info in _members.Select(t => t.Item1))
                 {
-                    case MemberTypes.Field:
-                        FieldInfo fieldInfo = (FieldInfo) info;
-                        dto.AppendLine($"    public {FormatType(fieldInfo.FieldType)} {info.Name};");
-                        break;
+                    switch (info.MemberType)
+                    {
+                        case MemberTypes.Field:
+                            FieldInfo fieldInfo = (FieldInfo) info;
+                            dto.AppendLine($"    public {FormatType(fieldInfo.FieldType)} {info.Name};");
+                            break;
 
-                    case MemberTypes.Property:
-                        PropertyInfo propertyInfo = (PropertyInfo) info;
-                        dto.AppendLine($"    public {FormatType(propertyInfo.PropertyType)} {info.Name} {{ get; set;}}");
-                        break;
+                        case MemberTypes.Property:
+                            PropertyInfo propertyInfo = (PropertyInfo) info;
+                            dto.AppendLine($"    public {FormatType(propertyInfo.PropertyType)} {info.Name} {{ get; set;}}");
+                            break;
 
-                    default:
-                        continue;
+                        default:
+                            continue;
+                    }
                 }
+
+                dto.AppendLine("  }");
+                dto.AppendLine("}");
+                return dto.ToString();
+            }
+            catch (Exception ex)
+            {
+                Log.AppendLine($"Error Creating DTO for {poco.FullName}");
+                Log.AppendLine(ex.ToString());
             }
 
-            dto.AppendLine("  }");
-            dto.AppendLine("}");
-            return dto.ToString();
+            return null;
         }
-
 
         /// <summary>
         ///     write type to Ts class format
         /// </summary>
         /// <returns></returns>
-        public string CreateTS(Type target)
+        public string CreateTS(Type poco)
         {
-            AnalyseType(target);
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"export class {_poco.Name} {{");
-            foreach (MemberInfo info in _members.Select(t => t.Item1))
+            try
             {
-                sb.AppendLine($"  {ToCamelCase(info.Name)}: {ConvertDataTypeToTS(info)};");
+                AnalyseType(poco);
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine($"export class {_poco.Name} {{");
+                foreach (MemberInfo info in _members.Select(t => t.Item1))
+                {
+                    sb.AppendLine($"  {ToCamelCase(info.Name)}: {ConvertMemberToTS(info)};");
+                }
+
+                sb.AppendLine("}");
+                return sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                Log.AppendLine($"Error Creating TS for {poco.FullName}");
+                Log.AppendLine(ex.ToString());
             }
 
-            sb.AppendLine("}");
-            return sb.ToString();
+            return null;
         }
 
         /// <summary>
@@ -131,31 +155,41 @@ namespace ChasWare.Common.Utils.Transformation
         /// <returns></returns>
         public string CreateTX(Type poco)
         {
-            AnalyseType(poco);
-            StringBuilder tx = new StringBuilder();
-            tx.AppendLine(DisplayWarning());
-            tx.AppendLine("using System;");
-            tx.AppendLine("using System.Collections.Generic;");
-            tx.AppendLine($"using {poco.Namespace};");
-            tx.AppendLine($"using {poco.Namespace}.DTO;");
+            try
+            {
+                AnalyseType(poco);
+                StringBuilder tx = new StringBuilder();
+                tx.AppendLine(DisplayWarning);
+                tx.AppendLine("using System;");
+                tx.AppendLine("using System.Collections.Generic;");
+                tx.AppendLine("using System.Linq;");
+                tx.AppendLine($"using {poco.Namespace};");
+                tx.AppendLine($"using {poco.Namespace}.DTO;");
 
-            tx.AppendLine();
-            tx.AppendLine($"namespace {_poco.Namespace}.TX");
-            tx.AppendLine("{");
-            tx.AppendLine($" public static class {poco.Name}TX");
-            tx.AppendLine("  {");
+                tx.AppendLine();
+                tx.AppendLine($"namespace {_poco.Namespace}.TX");
+                tx.AppendLine("{");
+                tx.AppendLine($" public static class {poco.Name}TX");
+                tx.AppendLine("  {");
 
-            //write method to read data from DTO
-            CreateReadFromDTO(tx);
+                //write method to read data from DTO
+                CreateReadFromDTO(tx);
 
-            // write method to write data to DTO
-            CreateWriteToDTO(tx);
+                // write method to write data to DTO
+                CreateWriteToDTO(tx);
 
-            tx.AppendLine("  }");
-            tx.AppendLine("}");
-            return tx.ToString();
+                tx.AppendLine("  }");
+                tx.AppendLine("}");
+                return tx.ToString();
+            }
+            catch (Exception ex)
+            {
+                Log.AppendLine($"Error Creating TX for {poco.FullName}");
+                Log.AppendLine(ex.ToString());
+            }
+
+            return null;
         }
-
 
         public string ExtractEnums<T>() // Enums<>, since Enum<> is not allowed.
         {
@@ -189,7 +223,7 @@ namespace ChasWare.Common.Utils.Transformation
 
                 if (!Directory.Exists(directory))
                 {
-                    _log.AppendLine($"Creating directory {directory}");
+                    Log.AppendLine($"Creating directory {directory}");
                     Directory.CreateDirectory(directory);
                 }
 
@@ -206,6 +240,44 @@ namespace ChasWare.Common.Utils.Transformation
         #endregion
 
         #region other methods
+
+        private static string CleanTypeName(Type type)
+        {
+            if (Nullable.GetUnderlyingType(type) != null)
+            {
+                return $"{CleanTypeName(Nullable.GetUnderlyingType(type))}?";
+            }
+
+            switch (type.Name)
+            {
+                case "String":
+                    return "string";
+                case "Boolean":
+                    return "bool";
+                case "Int16":
+                    return "short";
+                case "Int32":
+                    return "int";
+                case "UInt32":
+                    return "uint";
+                case "Int64":
+                    return "long";
+                case "UInt64":
+                    return "ulong";
+                default:
+                    if (type.IsPrimitive)
+                    {
+                        return ToCamelCase(type.Name);
+                    }
+
+                    return type.Name;
+            }
+        }
+
+        private static string ConflateType(MemberInfo sibling)
+        {
+            return sibling != null ? sibling.Name + "." : "";
+        }
 
         private static Type GetDataType(MemberInfo member)
         {
@@ -245,6 +317,11 @@ namespace ChasWare.Common.Utils.Transformation
             return loaded?.GetTypes().Where(t => t.GetCustomAttributes<Transform>().Any()).ToList();
         }
 
+        /// <summary>
+        ///     extract all non-readonly fields and properties. als check Ignore attribute
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         private static List<MemberInfo> GetInterfaceMembers(Type type)
         {
             return type.GetMembers(BindingFlags.Public | BindingFlags.Instance)
@@ -253,18 +330,32 @@ namespace ChasWare.Common.Utils.Transformation
                                     !IsReadonlyMember(mi)).ToList();
         }
 
+        /// <summary>
+        ///     have we been told to conflate this sibling?
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
         private static bool IsConflated(MemberInfo info)
         {
             return info.GetCustomAttributes<Transform>().Any(a => a.Conflate);
         }
 
+        /// <summary>
+        ///     check to see if this member is readonly
+        /// </summary>
+        /// <param name="m"></param>
+        /// <returns></returns>
         private static bool IsReadonlyMember(MemberInfo m)
         {
             return m.MemberType == MemberTypes.Field && ((FieldInfo) m).IsInitOnly ||
                    m.MemberType == MemberTypes.Property && !((PropertyInfo) m).CanWrite;
         }
 
-
+        /// <summary>
+        ///     convert to TS styled camelcase (lower first letter)
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         private static string ToCamelCase(string s)
         {
             if (string.IsNullOrEmpty(s))
@@ -280,20 +371,22 @@ namespace ChasWare.Common.Utils.Transformation
             return char.ToLowerInvariant(s[0]) + s.Substring(1);
         }
 
-        private MemberInfo AnalyseFields(Type target, bool checkExisting)
+        /// <summary>
+        ///     read through members and build a list, conflating as appropriate
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="sibling"></param>
+        private void AnalyseFields(Type target, MemberInfo sibling)
         {
-            // source is used where we are flattening sibling objects
-            MemberInfo sibling = target;
-
             // scan through properties and fields of target type
             // if this is the main class then do not check for existing fields
             foreach (MemberInfo info in GetInterfaceMembers(target))
             {
                 // do we already have this field (or is it part of parent
                 // and we are going to deal with it later)?
-                if (checkExisting && _existingMembers.Any(mi => mi.Name == info.Name))
+                if (sibling != null && _existingMembers.Any(mi => mi.Name == info.Name))
                 {
-                    _log.AppendLine($"  field '{info.Name}' ignored as it already exists;");
+                    Log.AppendLine($"  field '{info.Name}' ignored as it already exists;");
                     continue;
                 }
 
@@ -307,7 +400,7 @@ namespace ChasWare.Common.Utils.Transformation
                         // see if this is a sibling object 
                         if (ExportedTypes.Contains(fieldInfo.FieldType) && IsConflated(info))
                         {
-                            sibling = AnalyseFields(fieldInfo.FieldType, true);
+                            AnalyseFields(fieldInfo.FieldType, info);
                             continue;
                         }
 
@@ -320,7 +413,7 @@ namespace ChasWare.Common.Utils.Transformation
                         // see if this is a sibling object 
                         if (ExportedTypes.Contains(propertyInfo.PropertyType) && IsConflated(info))
                         {
-                            sibling = AnalyseFields(propertyInfo.PropertyType, true);
+                            AnalyseFields(propertyInfo.PropertyType, info);
                             continue;
                         }
 
@@ -331,8 +424,6 @@ namespace ChasWare.Common.Utils.Transformation
 
                 _members.Add(new Tuple<MemberInfo, MemberInfo>(info, sibling));
             }
-
-            return sibling;
         }
 
         /// <summary>
@@ -346,16 +437,26 @@ namespace ChasWare.Common.Utils.Transformation
                 _poco = target;
                 _members = new List<Tuple<MemberInfo, MemberInfo>>();
                 _existingMembers = GetInterfaceMembers(target);
-                AnalyseFields(target, false);
+                AnalyseFields(target, null);
             }
         }
 
-        private string ConvertDataTypeToTS(MemberInfo mi)
+        /// <summary>
+        ///     convert c# member type to TS
+        /// </summary>
+        /// <param name="mi"></param>
+        /// <returns></returns>
+        private string ConvertMemberToTS(MemberInfo mi)
         {
             Type t = mi is PropertyInfo info ? info.PropertyType : ((FieldInfo) mi).FieldType;
             return ConvertToTsType(t);
         }
 
+        /// <summary>
+        ///     convert existing class reference to equiv DTO for non conflated members
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         private string ConvertToDTOType(Type type)
         {
             if (ExportedTypes.Contains(type))
@@ -363,9 +464,14 @@ namespace ChasWare.Common.Utils.Transformation
                 return type.Name + "DTO";
             }
 
-            return type.Name;
+            return CleanTypeName(type);
         }
 
+        /// <summary>
+        ///     convert c# type to TS
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         private string ConvertToTsType(Type t)
         {
             while (true)
@@ -423,87 +529,115 @@ namespace ChasWare.Common.Utils.Transformation
             }
         }
 
-        private bool CopyArray(MemberInfo member, MemberInfo sibling, StringBuilder tx)
+        /// <summary>
+        ///     read data from DTO back to POCO.
+        ///     NOTE: does not manage array / enumerations as yet
+        /// </summary>
+        /// <param name="tx"></param>
+        private void CreateReadFromDTO(StringBuilder tx)
         {
-            Type memberType = GetDataType(member);
-            if (memberType.IsArray)
-            {
-                Type elementType = memberType.GetElementType();
-                if (elementType != null)
-                {
-                    // use TX for exported type to deep copy
-                    if (ExportedTypes.Contains(elementType))
-                    {
-                        tx.AppendLine($"       created.{member.Name} = source.{GetSourceObject(member, sibling)}Select(i => {elementType}TX.WriteToDTO(i)).ToArray();");
-                    }
-                    else
-                    {
-                        tx.AppendLine($"       created.{member.Name} = source.{GetSourceObject(member, sibling)}Select().ToArray();");
-                    }
+            tx.AppendLine($"    public static void ReadFromDTO({_poco.Name} target, {_poco.Name}DTO source)");
+            tx.AppendLine("    {");
 
-                    return true;
+            foreach (Tuple<MemberInfo, MemberInfo> item in _members)
+            {
+                MemberInfo member = item.Item1;
+                Type memberType = GetDataType(member);
+                MemberInfo sibling = item.Item2;
+
+                // at present NO SUPPORT FOR UPDATING COLLECTIONS!
+                if (memberType.IsArray || memberType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(memberType))
+                {
+                    tx.AppendLine($"       //[TODO] target.{ConflateType(sibling)}{member.Name} = source.{member.Name};");
+                    continue;
                 }
-            }
 
-            if (memberType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(memberType))
-            {
-                // use TX for exported type to deep copy
-                MemberInfo elementType = memberType.GetGenericArguments()[0];
-                if (ExportedTypes.Contains(elementType))
+                if (ExportedTypes.Contains(memberType))
                 {
-                    tx.AppendLine($"       created.{member.Name} = source.{GetSourceObject(member, sibling)}Select(i => {elementType.Name}TX.WriteToDTO(i)).ToArray();");
+                    tx.AppendLine($"       {memberType.Name}TX.ReadFromDTO(target.{ConflateType(sibling)}{member.Name}, source.{member.Name});");
                 }
                 else
                 {
-                    tx.AppendLine($"       created.{member.Name} = source.{GetSourceObject(member, sibling)}Select().ToArray();");
+                    tx.AppendLine($"       target.{ConflateType(sibling)}{member.Name} = source.{member.Name};");
                 }
-
-                return true;
             }
-
-            return false;
-        }
-
-        private void CreateReadFromDTO(StringBuilder tx)
-        {
-            tx.AppendLine($"    public static void ReadFromDTO({_poco.Name}DTO source, {_poco.Name} target)");
-            tx.AppendLine("    {");
-
-            foreach (Tuple<MemberInfo, MemberInfo> member in _members.Where(m => !IsReadonlyMember(m.Item1)))
-            {
-                tx.AppendLine($"       target.{GetSourceObject(member.Item1, member.Item2)}{member.Item1.Name} = source.{member.Item1.Name};");
-            }
-
 
             tx.AppendLine("    }");
             tx.AppendLine("");
         }
 
+        /// <summary>
+        ///     copy data from POCO to new DTO and manage conflation
+        /// </summary>
+        /// <param name="tx"></param>
         private void CreateWriteToDTO(StringBuilder tx)
         {
             tx.AppendLine($"    public static {_poco.Name}DTO WriteToDTO({_poco.Name} source)");
             tx.AppendLine("    {");
-            tx.AppendLine($"       {_poco.Name}DTO created = new {_poco.Name}DTO();");
+            tx.AppendLine($"       return  new {_poco.Name}DTO");
+            tx.AppendLine("       {");
 
-
-            foreach (Tuple<MemberInfo, MemberInfo> member in _members)
+            foreach (Tuple<MemberInfo, MemberInfo> item in _members)
             {
-                if (CopyArray(member.Item1, member.Item2, tx))
+                MemberInfo member = item.Item1;
+                Type memberType = GetDataType(member);
+                MemberInfo sibling = item.Item2;
+
+                if (memberType.IsArray)
                 {
+                    Type elementType = memberType.GetElementType();
+                    if (elementType != null)
+                    {
+                        // use TX for exported type to deep copy
+                        if (ExportedTypes.Contains(elementType))
+                        {
+                            tx.AppendLine($"         {member.Name} = source.{ConflateType(sibling)}{member.Name}.Select({elementType}TX.WriteToDTO).ToArray(),");
+                        }
+                        else
+                        {
+                            tx.AppendLine($"         {member.Name} = source.{ConflateType(sibling)}{member.Name}.Select().ToArray(),");
+                        }
+
+                        continue;
+                    }
+                }
+
+                if (memberType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(memberType))
+                {
+                    // use TX for exported type to deep copy
+                    MemberInfo elementType = memberType.GetGenericArguments()[0];
+                    if (ExportedTypes.Contains(elementType))
+                    {
+                        tx.AppendLine($"         {member.Name} = source.{ConflateType(sibling)}{member.Name}.Select({elementType.Name}TX.WriteToDTO).ToArray(),");
+                    }
+                    else
+                    {
+                        tx.AppendLine($"         {member.Name} = source.{ConflateType(sibling)}{member.Name}.Select().ToArray()");
+                    }
+
                     continue;
                 }
 
-                if (!IsReadonlyMember(member.Item1))
+                if (ExportedTypes.Contains(memberType))
                 {
-                    tx.AppendLine($"       created.{member.Item1.Name} = source.{GetSourceObject(member.Item1, member.Item2)}{member.Item1.Name};");
+                    tx.AppendLine($"         {member.Name} = {ConflateType(sibling)}{member.Name}TX.WriteToDTO(source.{member.Name}),");
+                }
+                else
+                {
+                    tx.AppendLine($"         {member.Name} = source.{ConflateType(sibling)}{member.Name},");
                 }
             }
 
-            tx.AppendLine("       return created;");
+            tx.AppendLine("       };");
             tx.AppendLine("    }");
             tx.AppendLine("");
         }
 
+        /// <summary>
+        ///     change Type to new Type
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         private string FormatType(Type t)
         {
             if (t.IsArray)
@@ -522,18 +656,7 @@ namespace ChasWare.Common.Utils.Transformation
                 return $"{enumerableTypeName}<{ConvertToDTOType(t.GetGenericArguments()[0])}>";
             }
 
-            if (Nullable.GetUnderlyingType(t) != null)
-            {
-                return $"{Nullable.GetUnderlyingType(t)?.Name}?";
-            }
-
             return ConvertToDTOType(t);
-        }
-
-
-        private string GetSourceObject(MemberInfo memberInfo, MemberInfo sibling)
-        {
-            return memberInfo.DeclaringType != _poco ? $"{sibling.Name}." : "";
         }
 
         #endregion
@@ -550,14 +673,14 @@ namespace ChasWare.Common.Utils.Transformation
             #region public properties
 
             /// <summary>
-            ///     should this class be exported
-            /// </summary>
-            public bool Ignore { get; set; } = true;
-
-            /// <summary>
             ///     will copy unmatched fields from siblings
             /// </summary>
             public bool Conflate { get; set; }
+
+            /// <summary>
+            ///     should this class be exported
+            /// </summary>
+            public bool Ignore { get; set; }
 
             #endregion
         }

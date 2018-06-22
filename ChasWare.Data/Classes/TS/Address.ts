@@ -4,6 +4,11 @@ export class Address {
   addressLine2: string;
   city: string;
   stateProvinceId: number;
+  stateProvinceCode: string;
+  countryRegionCode: string;
+  isOnlyStateProvinceFlag: boolean;
+  name: string;
+  territoryId: number;
   postalCode: string;
   modifiedDate: any;
 }

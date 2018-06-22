@@ -1,5 +1,6 @@
 export class Employee {
   personId: number;
+  person: Person;
   loginId: string;
   jobTitle: string;
   currentFlag: boolean;

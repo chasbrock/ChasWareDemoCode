@@ -14,11 +14,6 @@ namespace ChasWare.Data.Classes
     [Transformer.Transform]
     public class Employee
     {
-        #region public properties
-
-      
-        #endregion
-
         #region public methods
 
         /// <summary>
@@ -43,7 +38,6 @@ namespace ChasWare.Data.Classes
         [Key, ForeignKey(nameof(Person))]
         public int PersonId { get; set; }
 
-        [Transformer.Transform(Conflate = true)]
         public virtual Person Person { get; set; }
 
         [StringLength(256)]

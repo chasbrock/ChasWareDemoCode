@@ -143,7 +143,6 @@ namespace ChasWare.Common.Utils.Helpers
             return result.ToString();
         }
 
-
         /// <summary>
         ///     get substring form string for everything before first instance of delim
         /// </summary>

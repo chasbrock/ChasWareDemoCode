@@ -28,7 +28,6 @@ namespace ChasWare.Common.Tests.Utils.Transform
         #endregion
     }
 
-
     [Transformer.Transform]
     public class TestParent
     {
@@ -37,9 +36,21 @@ namespace ChasWare.Common.Tests.Utils.Transform
         public int? Id { get; set; }
         public double[] Values;
         public string ParentName { get; set; }
+
+        [Transformer.Transform(Conflate = true)]
         public TestAddress HomeAddress { get; set; }
+
+        [Transformer.Transform(Conflate = false)]
+        public TestAddress WorkAddress { get; set; }
+
         public List<TestChild> Children { get; set; }
         public DateTime TimeStamp { get; set; }
+
+        [Transformer.Transform(Ignore = true)]
+        public TestAddress PrivateAddress { get; set; }
+
+        public readonly int ReadOnly1;
+        public int ReadOnly { get; } 
 
         #endregion
     }

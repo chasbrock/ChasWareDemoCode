@@ -5,6 +5,7 @@
 //  --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -15,6 +16,8 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using ChasWare.Data;
 using ChasWare.Data.Classes;
+using ChasWare.Data.Classes.DTO;
+using ChasWare.Data.Classes.TX;
 using Common.Logging;
 
 namespace ChasWare.DataService.Controllers
@@ -68,7 +71,7 @@ namespace ChasWare.DataService.Controllers
         {
             try
             {
-                Address address = await Task.Run(() => { return _dataContext.Addresses.AsNoTracking().FirstOrDefault(a => a.EntityAddress.AddressId == id); });
+                AddressDTO address = await Task.Run(() => { return AddressTX.WriteToDTO( _dataContext.Addresses.Include(a => a.StateProvince).AsEnumerable().FirstOrDefault(a => a.AddressId == id)); });
                 if (address == null)
                 {
                     return NotFound();
@@ -85,9 +88,9 @@ namespace ChasWare.DataService.Controllers
         }
 
         // GET: api/Addresses
-        public IQueryable<Address> GetAddresses()
+        public IEnumerable<AddressDTO> GetAddresses()
         {
-            return _dataContext.Addresses.AsNoTracking();
+            return _dataContext.Addresses.Include(x => x.StateProvince).AsNoTracking().AsEnumerable().Select(AddressTX.WriteToDTO);
         }
 
         // POST: api/Addresses

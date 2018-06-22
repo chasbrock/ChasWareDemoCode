@@ -15,6 +15,8 @@ namespace ChasWare.Common.Tests.Utils.Helpers
     [TestClass]
     public class ConfigTests
     {
+        #region public methods
+
         /// <summary>
         ///     The config tests.
         /// </summary>
@@ -30,5 +32,7 @@ namespace ChasWare.Common.Tests.Utils.Helpers
             Assert.IsTrue(Config.IsAppSettingAvailable("bool"));
             Assert.IsFalse(Config.IsAppSettingAvailable("yes"));
         }
+
+        #endregion
     }
 }
