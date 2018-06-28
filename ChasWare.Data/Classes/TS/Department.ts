@@ -1,6 +1,6 @@
 export class Department {
-  departmentId: number;
-  name: string;
-  groupName: string;
-  modifiedDate: any;
+    departmentId: number;
+    name: string;
+    groupName: string;
+    modifiedDate: any;
 }

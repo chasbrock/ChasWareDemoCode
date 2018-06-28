@@ -1,5 +1,5 @@
 export class AddressType {
-  addressTypeId: number;
-  name: string;
-  modifiedDate: any;
+    addressTypeId: number;
+    name: string;
+    modifiedDate: any;
 }

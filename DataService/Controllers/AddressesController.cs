@@ -52,7 +52,7 @@ namespace ChasWare.DataService.Controllers
         [ResponseType(typeof(Address))]
         public async Task<IHttpActionResult> DeleteAddress(int id)
         {
-            Address address = await Task.Run(() => { return _dataContext.Addresses.AsNoTracking().FirstOrDefault(a => a.EntityAddress.AddressId == id); });
+            Address address = await Task.Run(() => { return _dataContext.Addresses.FirstOrDefault(a => a.EntityAddress.AddressId == id); });
 
             if (address == null)
             {
@@ -71,7 +71,7 @@ namespace ChasWare.DataService.Controllers
         {
             try
             {
-                AddressDTO address = await Task.Run(() => { return AddressTX.WriteToDTO( _dataContext.Addresses.Include(a => a.StateProvince).AsEnumerable().FirstOrDefault(a => a.AddressId == id)); });
+                AddressDTO address = await Task.Run(() => { return AddressTX.WriteToDTO(_dataContext.Addresses.Include(a => a.StateProvince).AsEnumerable().FirstOrDefault(a => a.AddressId == id)); });
                 if (address == null)
                 {
                     return NotFound();
