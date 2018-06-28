@@ -14,7 +14,7 @@ namespace ChasWare.Data.Classes.TX
 {
     public static class EmployeeTX
     {
-        public static void ReadFromDTO(Employee target, EmployeeDTO source)
+        public static Employee ReadFromDTO(Employee target, EmployeeDTO source)
         {
             target.PersonId = source.PersonId;
             PersonTX.ReadFromDTO(target.Person, source.Person);
@@ -30,6 +30,7 @@ namespace ChasWare.Data.Classes.TX
             target.SickLeaveHours = source.SickLeaveHours;
             target.VacationHours = source.VacationHours;
             target.ModifiedDate = source.ModifiedDate;
+            return target;
         }
 
         public static EmployeeDTO WriteToDTO(Employee source)

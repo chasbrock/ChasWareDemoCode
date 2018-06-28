@@ -14,7 +14,7 @@ namespace ChasWare.Data.Classes.TX
 {
     public static class StateProvinceTX
     {
-        public static void ReadFromDTO(StateProvince target, StateProvinceDTO source)
+        public static StateProvince ReadFromDTO(StateProvince target, StateProvinceDTO source)
         {
             target.StateProvinceId = source.StateProvinceId;
             target.StateProvinceCode = source.StateProvinceCode;
@@ -23,6 +23,7 @@ namespace ChasWare.Data.Classes.TX
             target.Name = source.Name;
             target.TerritoryId = source.TerritoryId;
             target.ModifiedDate = source.ModifiedDate;
+            return target;
         }
 
         public static StateProvinceDTO WriteToDTO(StateProvince source)

@@ -14,7 +14,7 @@ namespace ChasWare.Data.Classes.TX
 {
     public static class EntityAddressTX
     {
-        public static void ReadFromDTO(EntityAddress target, EntityAddressDTO source)
+        public static EntityAddress ReadFromDTO(EntityAddress target, EntityAddressDTO source)
         {
             AddressTX.ReadFromDTO(target.Address, source.Address);
             AddressTypeTX.ReadFromDTO(target.AddressType, source.AddressType);
@@ -23,6 +23,7 @@ namespace ChasWare.Data.Classes.TX
             target.EntityId = source.EntityId;
             target.AddressTypeId = source.AddressTypeId;
             target.ModifiedDate = source.ModifiedDate;
+            return target;
         }
 
         public static EntityAddressDTO WriteToDTO(EntityAddress source)

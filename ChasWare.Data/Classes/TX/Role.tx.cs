@@ -14,11 +14,12 @@ namespace ChasWare.Data.Classes.TX
 {
     public static class RoleTX
     {
-        public static void ReadFromDTO(Role target, RoleDTO source)
+        public static Role ReadFromDTO(Role target, RoleDTO source)
         {
             target.RoleId = source.RoleId;
             target.Name = source.Name;
             target.ModifiedDate = source.ModifiedDate;
+            return target;
         }
 
         public static RoleDTO WriteToDTO(Role source)

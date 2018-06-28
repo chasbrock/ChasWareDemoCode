@@ -14,10 +14,53 @@ namespace ChasWare.Data.Classes.TX
 {
     public static class EntityTX
     {
-        public static void ReadFromDTO(Entity target, EntityDTO source)
+        public static Entity ReadFromDTO(Entity target, EntityDTO source)
         {
+            ReadAddressesFromDTO(target.Addresses, source.Addresses);
+            ReadContactDetailsFromDTO(target.ContactDetails, source.ContactDetails);
             target.EntityId = source.EntityId;
             target.ModifiedDate = source.ModifiedDate;
+            return target;
+        }
+
+        public static void ReadAddressesFromDTO(ICollection<EntityAddress> target, IEnumerable<EntityAddressDTO> source)
+        {
+            List<EntityAddress> existing = target.ToList();
+            foreach (EntityAddressDTO item in source)
+            {
+                EntityAddress found = target.FirstOrDefault(t => EntityAddressTX.Compare(t, item) == 0);
+                if (found != null)
+                {
+                    EntityAddressTX.ReadFromDTO(found, item);
+                    existing.Remove(found);
+                    continue;
+                }
+                 target.Add(EntityAddressTX.ReadFromDTO(new EntityAddress(), item));
+            }
+            foreach(EntityAddress deleted in existing)
+            {
+                target.Remove(deleted);
+            }
+        }
+
+        public static void ReadContactDetailsFromDTO(ICollection<EntityContact> target, IEnumerable<EntityContactDTO> source)
+        {
+            List<EntityContact> existing = target.ToList();
+            foreach (EntityContactDTO item in source)
+            {
+                EntityContact found = target.FirstOrDefault(t => EntityContactTX.Compare(t, item) == 0);
+                if (found != null)
+                {
+                    EntityContactTX.ReadFromDTO(found, item);
+                    existing.Remove(found);
+                    continue;
+                }
+                 target.Add(EntityContactTX.ReadFromDTO(new EntityContact(), item));
+            }
+            foreach(EntityContact deleted in existing)
+            {
+                target.Remove(deleted);
+            }
         }
 
         public static EntityDTO WriteToDTO(Entity source)

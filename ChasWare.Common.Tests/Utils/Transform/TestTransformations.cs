@@ -34,6 +34,26 @@ namespace ChasWare.Common.Tests.Utils.Transform
         }
 
         /// <summary>
+        ///     test we proppertly flatten a parent / child / sibling heirarchy
+        /// </summary>
+        [TestMethod]
+        public void ExportToController()
+        {
+            // create dummy class
+            string fileContent = CreateDummyDTO();
+
+            Transformer transformer = new Transformer("ChasWare.Common.Tests", string.Empty);
+            Type parentType = transformer.ExportedTypes.Single(t => t == typeof(TestParent));
+            Assert.IsNotNull(parentType);
+
+            string exported = transformer.CreateController("ChasWare.DataService.Controllers", parentType);
+            File.WriteAllText(@"d:\Logs\ExportToController.cs", exported); 
+            string a = Regex.Replace(fileContent, @"\s", "");
+            string b = Regex.Replace(exported, @"\s", "");
+            Assert.IsTrue(string.Compare(a, b, StringComparison.OrdinalIgnoreCase) == 0);
+        }
+
+        /// <summary>
         ///     test that we produce the data we expect
         /// </summary>
         [TestMethod]

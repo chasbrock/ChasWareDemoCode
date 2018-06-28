@@ -11,7 +11,7 @@ using ChasWare.Common.Utils.Transformation;
 
 namespace ChasWare.Data.Classes
 {
-    [Transformer.Transform]
+    [Transformer.Transform(ContextName = "Addresses")]
     public class Address
     {
         #region Entity Framework Mapping
@@ -34,7 +34,7 @@ namespace ChasWare.Data.Classes
         [Required, ForeignKey(nameof(StateProvince))]
         public int StateProvinceId { get; set; }
 
-        [Transformer.Transform(Conflate = true)]
+        [Transformer.Transform(Conflate = true, Include = true)]
         public virtual StateProvince StateProvince { get; set; }
 
         [Required, StringLength(12)]

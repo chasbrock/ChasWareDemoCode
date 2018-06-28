@@ -11,7 +11,7 @@ using ChasWare.Common.Utils.Transformation;
 
 namespace ChasWare.Data.Classes
 {
-    [Transformer.Transform]
+    [Transformer.Transform(ContextName = "SalesTerritories")]
     public class SalesTerritory
     {
         #region Constants and fields 

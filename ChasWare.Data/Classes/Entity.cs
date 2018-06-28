@@ -17,7 +17,7 @@ namespace ChasWare.Data.Classes
     ///     maps entities such as persons and stores to common
     ///     data such as addresses and contacts
     /// </summary>
-    [Transformer.Transform]
+    [Transformer.Transform(ContextName = "Entities")]
     public class Entity
     {
         #region public properties

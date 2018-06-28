@@ -17,7 +17,7 @@ namespace ChasWare.Data
         public DataContext()
             : base("ChasWareDemo")
         {
-            Configuration.LazyLoadingEnabled = false; 
+            Configuration.LazyLoadingEnabled = false;
         }
 
         #endregion
@@ -58,6 +58,8 @@ namespace ChasWare.Data
         ///     Gets or sets the employees.
         /// </summary>
         public virtual DbSet<Employee> Employees { get; set; }
+
+        public DbSet<Entity> Entities { get; set; }
 
         /// <summary>
         ///     Gets or sets the entity addresses.

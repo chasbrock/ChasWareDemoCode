@@ -14,11 +14,12 @@ namespace ChasWare.Data.Classes.TX
 {
     public static class ContactDetailTX
     {
-        public static void ReadFromDTO(ContactDetail target, ContactDetailDTO source)
+        public static ContactDetail ReadFromDTO(ContactDetail target, ContactDetailDTO source)
         {
             target.ContactId = source.ContactId;
             target.Details = source.Details;
             target.ModifiedDate = source.ModifiedDate;
+            return target;
         }
 
         public static ContactDetailDTO WriteToDTO(ContactDetail source)

@@ -14,11 +14,12 @@ namespace ChasWare.Data.Classes.TX
 {
     public static class ContactTypeTX
     {
-        public static void ReadFromDTO(ContactType target, ContactTypeDTO source)
+        public static ContactType ReadFromDTO(ContactType target, ContactTypeDTO source)
         {
             target.ContactTypeId = source.ContactTypeId;
             target.Type = source.Type;
             target.ModifiedDate = source.ModifiedDate;
+            return target;
         }
 
         public static ContactTypeDTO WriteToDTO(ContactType source)

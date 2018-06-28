@@ -15,7 +15,7 @@ namespace ChasWare.Data.Classes
     ///     maps between entity /address / addresstype
     ///     allows entity to have more than one address
     /// </summary>
-    [Transformer.Transform]
+    [Transformer.Transform(ContextName = "EntityAddresses")]
     public class EntityAddress
     {
         #region Constants and fields 

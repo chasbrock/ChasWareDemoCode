@@ -14,7 +14,7 @@ namespace ChasWare.Data.Classes.TX
 {
     public static class AddressTX
     {
-        public static void ReadFromDTO(Address target, AddressDTO source)
+        public static Address ReadFromDTO(Address target, AddressDTO source)
         {
             target.AddressId = source.AddressId;
             target.AddressLine1 = source.AddressLine1;
@@ -28,6 +28,7 @@ namespace ChasWare.Data.Classes.TX
             target.StateProvince.TerritoryId = source.TerritoryId;
             target.PostalCode = source.PostalCode;
             target.ModifiedDate = source.ModifiedDate;
+            return target;
         }
 
         public static AddressDTO WriteToDTO(Address source)

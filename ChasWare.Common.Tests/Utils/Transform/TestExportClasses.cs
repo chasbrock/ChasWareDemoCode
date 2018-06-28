@@ -45,7 +45,7 @@ namespace ChasWare.Common.Tests.Utils.Transform
         public double[] Values;
         public string ParentName { get; set; }
 
-        [Transformer.Transform(Conflate = true)]
+        [Transformer.Transform(Conflate = true, Include=true)]
         public TestAddress HomeAddress { get; set; }
 
         public List<TestAddress> AddressList { get; set; }

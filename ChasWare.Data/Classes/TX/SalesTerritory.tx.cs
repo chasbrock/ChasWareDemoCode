@@ -14,7 +14,7 @@ namespace ChasWare.Data.Classes.TX
 {
     public static class SalesTerritoryTX
     {
-        public static void ReadFromDTO(SalesTerritory target, SalesTerritoryDTO source)
+        public static SalesTerritory ReadFromDTO(SalesTerritory target, SalesTerritoryDTO source)
         {
             target.TerritoryId = source.TerritoryId;
             target.Name = source.Name;
@@ -25,6 +25,7 @@ namespace ChasWare.Data.Classes.TX
             target.CostYTD = source.CostYTD;
             target.CostLastYear = source.CostLastYear;
             target.ModifiedDate = source.ModifiedDate;
+            return target;
         }
 
         public static SalesTerritoryDTO WriteToDTO(SalesTerritory source)

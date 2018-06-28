@@ -15,10 +15,10 @@
 	string assemblyName = "ChasWare.Data";
 	string rootPath = GetTarget(@"\Classes", Host);
 	ChasWare.Common.Utils.Transformation.Transformer transformer = new ChasWare.Common.Utils.Transformation.Transformer(assemblyName, rootPath);
-	
+
     string extension =  ".ts";
 	string fileName;
-
+	
 	foreach (Type t in transformer.ExportedTypes)
     {
        string content = transformer.CreateTS(t);
@@ -40,7 +40,7 @@
 	   }
   	   fileName = transformer.PrintToFile(t, content, "DTO", extension);
 	   WriteLine($"{DateTime.Now} Creating Data Transfer Object (DTO) file {t.Name} => {fileName}");
-   }
+   } 
 
     extension =  ".tx.cs";
 	foreach (Type t in transformer.ExportedTypes)
@@ -52,6 +52,18 @@
 	   }
   	   fileName = transformer.PrintToFile(t, content, "TX", extension);
 	   WriteLine($"{DateTime.Now} Creating Translator (TX) file {t.Name} => {fileName}");
+    }
+      
+    extension =  "Controller.cs";
+	foreach (Type t in transformer.ExportedTypes)
+    {
+	   string content = transformer.CreateController("ChasWare.DataService.Controllers", t);
+	   if(string.IsNullOrWhiteSpace(content)) 
+	   {
+	      continue;
+	   }
+  	   fileName = transformer.PrintToFile(t, content, "Controllers", extension);
+	   WriteLine($"{DateTime.Now} Creating Controller file {t.Name} => {fileName}");
    }
 
    WriteLine(transformer.Log.ToString());

@@ -14,11 +14,12 @@ namespace ChasWare.Data.Classes.TX
 {
     public static class AddressTypeTX
     {
-        public static void ReadFromDTO(AddressType target, AddressTypeDTO source)
+        public static AddressType ReadFromDTO(AddressType target, AddressTypeDTO source)
         {
             target.AddressTypeId = source.AddressTypeId;
             target.Name = source.Name;
             target.ModifiedDate = source.ModifiedDate;
+            return target;
         }
 
         public static AddressTypeDTO WriteToDTO(AddressType source)

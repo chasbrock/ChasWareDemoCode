@@ -14,7 +14,7 @@ namespace ChasWare.Data.Classes
     /// <summary>
     ///     used to provide basic access to entity and then onto address etc
     /// </summary>
-    [Transformer.Transform]
+    [Transformer.Transform(Ignore = true)]
     public abstract class EntityMapped
     {
         #region Entity Framework Mapping

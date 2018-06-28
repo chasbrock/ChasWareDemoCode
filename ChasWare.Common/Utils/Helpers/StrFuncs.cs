@@ -176,6 +176,16 @@ namespace ChasWare.Common.Utils.Helpers
         public static void IndentLine(this StringBuilder stringBuilder, int indent, string text)
         {
             stringBuilder.AppendLine(new string(' ', indent * 4)+ text);
+        } /// <summary>
+        /// indent text, suitable for code building.
+        /// Indent will be indent x 4 spaces;
+        /// </summary>
+        /// <param name="stringBuilder"></param>
+        /// <param name="indent"></param>
+        /// <param name="text"></param>
+        public static void Indent(this StringBuilder stringBuilder, int indent, string text)
+        {
+            stringBuilder.Append(new string(' ', indent * 4)+ text);
         }
 
         #endregion

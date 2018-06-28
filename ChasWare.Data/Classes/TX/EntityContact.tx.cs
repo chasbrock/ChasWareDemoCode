@@ -14,7 +14,7 @@ namespace ChasWare.Data.Classes.TX
 {
     public static class EntityContactTX
     {
-        public static void ReadFromDTO(EntityContact target, EntityContactDTO source)
+        public static EntityContact ReadFromDTO(EntityContact target, EntityContactDTO source)
         {
             ContactDetailTX.ReadFromDTO(target.ContactDetail, source.ContactDetail);
             ContactTypeTX.ReadFromDTO(target.ContactType, source.ContactType);
@@ -23,6 +23,7 @@ namespace ChasWare.Data.Classes.TX
             target.EntityId = source.EntityId;
             target.ContactTypeId = source.ContactTypeId;
             target.ModifiedDate = source.ModifiedDate;
+            return target;
         }
 
         public static EntityContactDTO WriteToDTO(EntityContact source)

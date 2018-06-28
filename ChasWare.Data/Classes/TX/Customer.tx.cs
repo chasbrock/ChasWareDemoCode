@@ -14,7 +14,7 @@ namespace ChasWare.Data.Classes.TX
 {
     public static class CustomerTX
     {
-        public static void ReadFromDTO(Customer target, CustomerDTO source)
+        public static Customer ReadFromDTO(Customer target, CustomerDTO source)
         {
             target.CustomerId = source.CustomerId;
             target.SalesTerritoryId = source.SalesTerritoryId;
@@ -25,6 +25,7 @@ namespace ChasWare.Data.Classes.TX
             PersonTX.ReadFromDTO(target.Person, source.Person);
             target.AccountNumber = source.AccountNumber;
             target.ModifiedDate = source.ModifiedDate;
+            return target;
         }
 
         public static CustomerDTO WriteToDTO(Customer source)

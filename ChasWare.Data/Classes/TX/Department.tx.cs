@@ -14,12 +14,13 @@ namespace ChasWare.Data.Classes.TX
 {
     public static class DepartmentTX
     {
-        public static void ReadFromDTO(Department target, DepartmentDTO source)
+        public static Department ReadFromDTO(Department target, DepartmentDTO source)
         {
             target.DepartmentId = source.DepartmentId;
             target.Name = source.Name;
             target.GroupName = source.GroupName;
             target.ModifiedDate = source.ModifiedDate;
+            return target;
         }
 
         public static DepartmentDTO WriteToDTO(Department source)
